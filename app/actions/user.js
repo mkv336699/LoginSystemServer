@@ -1,6 +1,4 @@
 
-// const config = require('../../config');
-
 const getAllUsers = () => {
     return new Promise(function (resolve, reject) {
         try {

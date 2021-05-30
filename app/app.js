@@ -6,7 +6,6 @@ const logger = require('morgan');
 const config = require('../config');
 const http = require('http');
 const mysql = require('mysql');
-const cors = require('cors');
 
 const app = express();
 
@@ -20,18 +19,6 @@ app.db.connect(function (err) {
 	console.log("Connected!");
 });
 
-/** Set up Schema */
-// require('./models')(app, mongoose);
-
-// /** Enable CORS */
-// const enableCORS = function (req, res, next) {
-// 	res.header('Access-Control-Allow-Origin', '*');
-// 	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-// 	res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Access-Control-Allow-Origin');
-// 	next();
-// };
-// app.use(enableCORS);
-
 var enableCORS = function (req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -40,30 +27,11 @@ var enableCORS = function (req, res, next) {
 };
 app.use(enableCORS);
 
-
-// const corsOpts = {
-// 	origin: '*',
-
-// 	methods: [
-// 		'GET',
-// 		'POST',
-// 	],
-
-// 	allowedHeaders: [
-// 		'Content-Type',
-// 	],
-// };
-
-// app.use(cors(corsOpts));
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use(bodyParser.json()); 
-// app.use(bodyParser.urlencoded({ extended: false })); 
 
 /** Mount routes */
 app.use(require('./routes'));
@@ -72,19 +40,6 @@ app.use(require('./routes'));
 app.use(function (req, res, next) {
 	next(createError(404));
 });
-
-// app.db = mongoose.createConnection(app.config.mongodb.uri, { useNewUrlParser: true, useFindAndModify: false });
-
-// /** Mongo Connection Error */
-// app.db.on('error', (error) => {
-// 	console.log('Error connecting to mongoose', error)
-// });
-
-// /** Mongo connected successfully */
-// app.db.once('open', () => {
-// 	console.log('Mongo Db connected!')
-// });
-
 
 /** Create http server */
 app.server = http.createServer()
